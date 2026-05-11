@@ -1,0 +1,7 @@
+# Postgres
+.pgpass
+
+# Windows
+Thumbs.db
+.SynologyWorkingDirectory
+desktop.ini
