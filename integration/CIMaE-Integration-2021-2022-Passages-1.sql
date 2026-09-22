@@ -3,7 +3,7 @@
 --	# Récupération des "Passages 1"
 insert into submissions.cimae_protocole_passages (
 select 
-gen_random_uuid() as data_id,
+concat('uuid:',gen_random_uuid()) as data_id,
 site as site_name,
 date::date as passage_date,
 date_trunc('minute', (interval '1 day' * NULLIF(replace(heurarriv, ',', '.'), 'NA')::numeric)::time + interval '59 seconds')::time as passage_time_begin,

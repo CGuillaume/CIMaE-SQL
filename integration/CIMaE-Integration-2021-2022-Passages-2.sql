@@ -3,7 +3,7 @@
 --	# Récupération des "Passages 2"
 insert into submissions.cimae_protocole_passages (
 select 
-gen_random_uuid() as data_id,
+concat('uuid:',gen_random_uuid()) as data_id,
 site as site_name,
 date2::date as passage_date,
 date_trunc('minute', (interval '1 day' * NULLIF(replace(heurarriv2, ',', '.'), 'NA')::numeric)::time + interval '59 seconds')::time as passage_time_begin,
@@ -20,21 +20,12 @@ case
 	else 'no'
 end as water_dry,
 NULLIF(replace(surfaceeau2, ',', '.'), 'NA')::numeric as water_area,
-case
-    when mesuresurf like '%pied%' then 'eye'
-    when mesuresurf in ('GPS', 'gps') then 'gps'
-    when mesuresurf = 'carte/SIG' then 'map'
-    ELSE NULL
-end as water_area_measure,
+'NA' as water_area_measure,
 null as water_transect_lenght,
 null as water_transect_lenght_measure,
 NULLIF(replace(profondeur2, ',', '.'), 'NA')::numeric as water_depth_mean,
 null as water_depth_max,
-case
-    when mesureprof like 'il' then 'eye'
-    when mesureprof like '%metre%' then 'meter'
-    else NULL
-end as water_depth_measure,
+'NA' as water_depth_measure,
 case
     when transpeau2 like 'je ne vois pas le fond' then 'no'
     when transpeau2 like 'je vois le fond mais mal' then 'bad'
@@ -52,16 +43,8 @@ case
 end as wetland_feed,
 NULLIF(replace(largeurmoyennecoureau2, ',', '.'), 'NA')::numeric as wetland_feed_river_width,
 NULLIF(replace(profondeurmoyennecoureau2, ',', '.'), 'NA')::numeric as wetland_feed_river_depth,
-case
-    when mesurecourseau like 'il' then 'eye'
-    when mesurecourseau like '%metre%' then 'meter'
-    else NULL
-end as wetland_feed_river_measure,
-case
-    when exutoirevisible like 'non' then 'no'
-    when exutoirevisible like 'oui' then 'yes'
-    else NULL
-end as wetland_outlet,
+'NA' as wetland_feed_river_measure,
+'NA' as wetland_outlet,
 case 
     when trim(largeurmoyenneexutoire2) in ('NA', 'nsp') then NULL
     else replace(largeurmoyenneexutoire2, ',', '.')::numeric
@@ -70,11 +53,7 @@ case
     when trim(profondeurmoyenneexutoire2) in ('NA', 'nsp') then NULL
     else replace(profondeurmoyenneexutoire2, ',', '.')::numeric
 end as wetland_outlet_depth,
-case
-    when mesureexutoire like 'il' then 'eye'
-    when mesureexutoire like '%metre%' then 'meter'
-    else NULL
-end as wetland_outlet_measure,
+'NA' as wetland_outlet_measure,
 concat_ws(' ',
     case when NULLIF(NULLIF("rocher/roche2", '0'), 'NA')::int > 0 then 'rock' end,
     case when NULLIF(NULLIF(gravier2, '0'), 'NA')::int > 0 then 'gravel' end,
